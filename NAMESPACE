@@ -1,0 +1,4 @@
+exportPattern("^[[:alpha:]]+")
+     importFrom("grDevices", "rgb")
+     importFrom("graphics", "axis", "lines", "plot", "points", "polygon")
+     importFrom("stats", "dnorm", "pnorm", "qnorm")
