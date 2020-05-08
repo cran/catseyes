@@ -4,9 +4,19 @@
 \alias{catseyes}
 \title{catseyes}
 \usage{
-catseyes(x, ymean, yse, dx = 0.1, conf = 0.95, se.only = TRUE,
-  col = "black", shade = rgb(0.05, 0.05, 0.05, 0.2), lwd = 1,
-  plot.mean.line = FALSE, fTransform = NULL)
+catseyes(
+  x,
+  ymean,
+  yse,
+  dx = 0.1,
+  conf = 0.95,
+  se.only = TRUE,
+  col = "black",
+  shade = rgb(0.05, 0.05, 0.05, 0.2),
+  lwd = 1,
+  plot.mean.line = FALSE,
+  fTransform = NULL
+)
 }
 \arguments{
 \item{x}{numeric horizontal position(s); if factor, will be converted to integer in factor level order}
@@ -55,9 +65,9 @@ catseyes(1:4,ymean=c(-3,2,-1,6),yse=c(1,2,4,3))
 lines(1:4,c(-3,2,-1,6),type="b")
 }
 \references{
-Cumming, G. (2014). The new statistics: Why and how. Psychological Science, 27, 7-29. <doi:10.1177/0956797613504966> <pmid:24220629> \cr
+Cumming, G. (2014). The new statistics: Why and how. Psychological Science, 27, 7-29. <doi:10.1177/0956797613504966> pmid:24220629 \cr
 \url{http://www.psychologicalscience.org/index.php/publications/observer/2014/march-14/theres-life-beyond-05.html}
 }
 \author{
-Clark R. Andersen \email{clanders@utmb.edu}
+Clark R. Andersen \email{crandersen@mdanderson.org}
 }

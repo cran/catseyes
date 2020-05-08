@@ -2,8 +2,8 @@ Package: catseyes
 Type: Package
 Title: Create Catseye Plots Illustrating the Normal Distribution of the
         Means
-Version: 0.2.3
-Authors@R: person("Clark", "Andersen", email = "clanders@utmb.edu", role=c("cre","aut"))
+Version: 0.2.5
+Authors@R: person("Clark", "Andersen", email = "crandersen@mdanderson.org", role=c("cre","aut"))
 Description: Provides the tools to produce catseye plots, principally
     by catseyesplot() function which calls R's standard plot() function internally, or alternatively
     by the catseyes() function to overlay the catseye plot onto an existing
@@ -20,11 +20,11 @@ Description: Provides the tools to produce catseye plots, principally
 License: GPL-3
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.0
+RoxygenNote: 7.1.0
 Suggests: emmeans
 NeedsCompilation: no
-Packaged: 2019-01-17 18:52:35 UTC; clanders
+Packaged: 2020-05-07 19:37:09 UTC; CRAndersen
 Author: Clark Andersen [cre, aut]
-Maintainer: Clark Andersen <clanders@utmb.edu>
+Maintainer: Clark Andersen <crandersen@mdanderson.org>
 Repository: CRAN
-Date/Publication: 2019-01-25 16:50:06 UTC
+Date/Publication: 2020-05-08 16:40:02 UTC

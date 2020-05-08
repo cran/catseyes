@@ -4,12 +4,30 @@
 \alias{catseyesplot}
 \title{catseyesplot}
 \usage{
-catseyesplot(x, ymean, yse, dx = 0.1, conf = 0.95, se.only = TRUE,
-  col = "black", shade = rgb(0.05, 0.05, 0.05, 0.2), lwd = 1,
-  plot.mean.line = FALSE, fTransform = NULL, labels = FALSE,
-  xlim = NULL, ylim = NULL, x_scatter = NULL, y_scatter = NULL,
-  jitter_scatter = FALSE, dx_scatter = 0.05, pch_scatter = NULL,
-  col_scatter = NULL, cex_scatter = 1, ...)
+catseyesplot(
+  x,
+  ymean,
+  yse,
+  dx = 0.1,
+  conf = 0.95,
+  se.only = TRUE,
+  col = "black",
+  shade = rgb(0.05, 0.05, 0.05, 0.2),
+  lwd = 1,
+  plot.mean.line = FALSE,
+  fTransform = NULL,
+  labels = FALSE,
+  xlim = NULL,
+  ylim = NULL,
+  x_scatter = NULL,
+  y_scatter = NULL,
+  jitter_scatter = FALSE,
+  dx_scatter = 0.05,
+  pch_scatter = 1,
+  col_scatter = 1,
+  cex_scatter = 1,
+  ...
+)
 }
 \arguments{
 \item{x}{numeric horizontal position(s); if factor, will be converted to integer in factor level order}
@@ -49,9 +67,9 @@ otherwise if FALSE will shade the confidence interval (per conf) about the mean}
 
 \item{dx_scatter}{numeric value specifying amount of jittering used if jitter_scatter is TRUE}
 
-\item{pch_scatter}{pch characters of points in scatterplot; if non-null, must correspond to x, otherwise selected automatically}
+\item{pch_scatter}{pch characters of points in scatterplot; if non-null, must be single value or vector corresponding to x, otherwise selected automatically}
 
-\item{col_scatter}{color of points in scatterplot; if non-null, must correspond to x, otherwise selected automatically}
+\item{col_scatter}{color of points in scatterplot; if non-null, must be single value or vector corresponding to x, otherwise selected automatically}
 
 \item{cex_scatter}{numeric scaling factor of points in scatterplot}
 
@@ -70,11 +88,10 @@ reflected over its base and rotated 90 degrees), with a shaded confidence interv
 are an intuitive way of illustrating and comparing normally distributed estimates, and are
 arguably a superior alternative to standard confidence intervals, since they show the full
 distribution rather than fixed quantile bounds.
-The catseyes() function requires pre-calculated means and standard errors (or standard deviations), provided
+The catseyesplot() function requires pre-calculated means and standard errors (or standard deviations), provided
 as numeric vectors; this allows the flexibility of obtaining this information from a
 variety of sources, such as direct calculation or prediction from a model -- see examples below.
 NOTE:  The drawn vertical range of the outline spans 99.8\% of the distribution of the mean.
-NOTE:  Vertical range of catseye outline spans 99.8\% of the distribution of the mean
 }
 \examples{
 #Show catseye plots for 4 groups with means of c(-3,2,-1,6)
@@ -110,6 +127,7 @@ lm1=lm(y~x,data=datTest)
 newdata=data.frame(x=c("1","2","3"))
 pred_lm=predict(lm1,se.fit = TRUE,newdata=newdata,type="response")
 catseyesplot(1:3,ymean=pred_lm$fit,yse=pred_lm$se.fit,xlab="Group",ylab="",
+     plot.mean.line = TRUE,labels=TRUE,
      x_scatter = datTest$x,y_scatter = datTest$y,jitter_scatter = TRUE,xaxt="n")
 
 #Demonstration of plotting of factor estimates from emmeans package
@@ -119,13 +137,16 @@ emmeans1=emmeans(lm1,~x)
 pairs(emmeans1,adjust="tukey")
 preds=confint(emmeans1)
 catseyesplot(1:3,ymean=preds$emmean,yse=preds$SE,xlab="Group",ylab="",
+     plot.mean.line = TRUE,labels=TRUE,
      x_scatter = datTest$x,y_scatter = datTest$y,jitter_scatter = TRUE,xaxt="n")
 #Plot with variable x positions
 catseyesplot(c(1,3.5,5),ymean=pred_lm$fit,yse=pred_lm$se.fit,xlab="Group",
+     plot.mean.line = TRUE,labels=TRUE,
      ylab="",x_scatter = datTest$x,y_scatter = datTest$y,jitter_scatter = TRUE,xaxt="n")
 
 #Demonstrate use of transformation function fTransform
 #Create skewed y
+set.seed(3142)
 datTest=data.frame(x=c(rep(1,10),rep(2,10),rep(3,10)),y=rnorm(30,mean=0))
 datTest$y[datTest$x==2]=datTest$y[datTest$x==2]+1
 datTest$y[datTest$x==3]=datTest$y[datTest$x==3]+.5
@@ -142,6 +163,7 @@ ses=c(sd(datTest$log_y[datTest$x==1]),sd(datTest$log_y[datTest$x==2]),
 #Plot on log scale
 catseyesplot(1:3,ymean=means,yse=ses,xlab="Group",ylab="",x_scatter = datTest$x,
      y_scatter = datTest$log_y,jitter_scatter = TRUE,xaxt="n",yaxt="n")
+axis(1,at=1:3,labels = c("Group1","Group2","Group3"))
 axis(2,at=log(c(0,1,2,4,8,16)+1),labels = c(0,1,2,4,8,16))
 #Show catseye plot on original (skewed) scale
 #Define function to invert data from log_y scale to y scale
@@ -169,9 +191,9 @@ catseyesplot(1:2,smr[,1],smr[,2],xaxt="n",ylab="Probability",xlab="Group",
 axis(1,at=c(1,2),labels = c("A","B"))
 }
 \references{
-Cumming, G. (2014). The new statistics: Why and how. Psychological Science, 27, 7-29. <doi:10.1177/0956797613504966> <pmid:24220629> \cr
+Cumming, G. (2014). The new statistics: Why and how. Psychological Science, 27, 7-29. <doi:10.1177/0956797613504966> pmid:24220629 \cr
 \url{http://www.psychologicalscience.org/index.php/publications/observer/2014/march-14/theres-life-beyond-05.html}
 }
 \author{
-Clark R. Andersen \email{clanders@utmb.edu}
+Clark R. Andersen \email{crandersen@mdanderson.org}
 }

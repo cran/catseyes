@@ -30,7 +30,7 @@
 #' catseyes(1:4,ymean=c(-3,2,-1,6),yse=c(1,2,4,3))
 #' #Optionally, add points and lines (usually lines only when joining time sequence)
 #' lines(1:4,c(-3,2,-1,6),type="b")
-#' @author Clark R. Andersen \email{clanders@@utmb.edu}
+#' @author Clark R. Andersen \email{crandersen@@mdanderson.org}
 #' @references
 #' Cumming, G. (2014). The new statistics: Why and how. Psychological Science, 27, 7-29. <doi:10.1177/0956797613504966> pmid:24220629 \cr
 #' \url{http://www.psychologicalscience.org/index.php/publications/observer/2014/march-14/theres-life-beyond-05.html}
@@ -49,8 +49,8 @@ catseyes<-function(x,ymean,yse,dx=.1,conf=.95,se.only=TRUE,col="black",shade=rgb
   }
 
   if(se.only) conf=1-2*(1-pnorm(1))
-  #Q=seq(0.001, 0.999, by = 0.001)
-  Q=seq(0.001, 0.999, by = 0.0001)#Try finer resolution
+  Q=seq(0.001, 0.999, by = 0.001)
+  #Q=seq(0.001, 0.999, by = 0.0001)#Try finer resolution
   yy0=qnorm(Q)#from -3.09 to 3.09, centered on 0
   xx0=dnorm(yy0)
   xx0=xx0*dx/max(xx0)
@@ -94,12 +94,10 @@ catseyes<-function(x,ymean,yse,dx=.1,conf=.95,se.only=TRUE,col="black",shade=rgb
 #' are an intuitive way of illustrating and comparing normally distributed estimates, and are
 #' arguably a superior alternative to standard confidence intervals, since they show the full
 #' distribution rather than fixed quantile bounds.
-#' The catseyes() function requires pre-calculated means and standard errors (or standard deviations), provided
+#' The catseyesplot() function requires pre-calculated means and standard errors (or standard deviations), provided
 #' as numeric vectors; this allows the flexibility of obtaining this information from a
 #' variety of sources, such as direct calculation or prediction from a model -- see examples below.
 #' NOTE:  The drawn vertical range of the outline spans 99.8\% of the distribution of the mean.
-
-#' NOTE:  Vertical range of catseye outline spans 99.8\% of the distribution of the mean
 #' @param x numeric horizontal position(s); if factor, will be converted to integer in factor level order
 #' @param ymean numeric mean(s)
 #' @param yse numeric standard error(s); may use standard deviation(s) for population level plots
@@ -119,8 +117,8 @@ catseyes<-function(x,ymean,yse,dx=.1,conf=.95,se.only=TRUE,col="black",shade=rgb
 #' @param y_scatter numeric y values of corresponding raw data for scatterplot
 #' @param jitter_scatter boolean, if TRUE x_scatter will be randomly jittered by jitter function, with amount=jitter_scatter
 #' @param dx_scatter numeric value specifying amount of jittering used if jitter_scatter is TRUE
-#' @param pch_scatter pch characters of points in scatterplot; if non-null, must correspond to x, otherwise selected automatically
-#' @param col_scatter color of points in scatterplot; if non-null, must correspond to x, otherwise selected automatically
+#' @param pch_scatter pch characters of points in scatterplot; if non-null, must be single value or vector corresponding to x, otherwise selected automatically
+#' @param col_scatter color of points in scatterplot; if non-null, must be single value or vector corresponding to x, otherwise selected automatically
 #' @param cex_scatter numeric scaling factor of points in scatterplot
 #' @param ... standard arguments to be passed to the plot function
 #' @return Returns a list containing xlim and ylim used in the plot
@@ -158,6 +156,7 @@ catseyes<-function(x,ymean,yse,dx=.1,conf=.95,se.only=TRUE,col="black",shade=rgb
 #' newdata=data.frame(x=c("1","2","3"))
 #' pred_lm=predict(lm1,se.fit = TRUE,newdata=newdata,type="response")
 #' catseyesplot(1:3,ymean=pred_lm$fit,yse=pred_lm$se.fit,xlab="Group",ylab="",
+#'      plot.mean.line = TRUE,labels=TRUE,
 #'      x_scatter = datTest$x,y_scatter = datTest$y,jitter_scatter = TRUE,xaxt="n")
 #'
 #' #Demonstration of plotting of factor estimates from emmeans package
@@ -167,13 +166,16 @@ catseyes<-function(x,ymean,yse,dx=.1,conf=.95,se.only=TRUE,col="black",shade=rgb
 #' pairs(emmeans1,adjust="tukey")
 #' preds=confint(emmeans1)
 #' catseyesplot(1:3,ymean=preds$emmean,yse=preds$SE,xlab="Group",ylab="",
+#'      plot.mean.line = TRUE,labels=TRUE,
 #'      x_scatter = datTest$x,y_scatter = datTest$y,jitter_scatter = TRUE,xaxt="n")
 #' #Plot with variable x positions
 #' catseyesplot(c(1,3.5,5),ymean=pred_lm$fit,yse=pred_lm$se.fit,xlab="Group",
+#'      plot.mean.line = TRUE,labels=TRUE,
 #'      ylab="",x_scatter = datTest$x,y_scatter = datTest$y,jitter_scatter = TRUE,xaxt="n")
 #'
 #' #Demonstrate use of transformation function fTransform
 #' #Create skewed y
+#' set.seed(3142)
 #' datTest=data.frame(x=c(rep(1,10),rep(2,10),rep(3,10)),y=rnorm(30,mean=0))
 #' datTest$y[datTest$x==2]=datTest$y[datTest$x==2]+1
 #' datTest$y[datTest$x==3]=datTest$y[datTest$x==3]+.5
@@ -190,6 +192,7 @@ catseyes<-function(x,ymean,yse,dx=.1,conf=.95,se.only=TRUE,col="black",shade=rgb
 #' #Plot on log scale
 #' catseyesplot(1:3,ymean=means,yse=ses,xlab="Group",ylab="",x_scatter = datTest$x,
 #'      y_scatter = datTest$log_y,jitter_scatter = TRUE,xaxt="n",yaxt="n")
+#' axis(1,at=1:3,labels = c("Group1","Group2","Group3"))
 #' axis(2,at=log(c(0,1,2,4,8,16)+1),labels = c(0,1,2,4,8,16))
 #' #Show catseye plot on original (skewed) scale
 #' #Define function to invert data from log_y scale to y scale
@@ -215,11 +218,11 @@ catseyes<-function(x,ymean,yse,dx=.1,conf=.95,se.only=TRUE,col="black",shade=rgb
 #' catseyesplot(1:2,smr[,1],smr[,2],xaxt="n",ylab="Probability",xlab="Group",
 #'      fTransform = fInvLogit,ylim=c(0,1))
 #' axis(1,at=c(1,2),labels = c("A","B"))
-#' @author Clark R. Andersen \email{clanders@@utmb.edu}
+#' @author Clark R. Andersen \email{crandersen@@mdanderson.org}
 #' @references
 #' Cumming, G. (2014). The new statistics: Why and how. Psychological Science, 27, 7-29. <doi:10.1177/0956797613504966> pmid:24220629 \cr
 #' \url{http://www.psychologicalscience.org/index.php/publications/observer/2014/march-14/theres-life-beyond-05.html}
-catseyesplot<-function(x,ymean,yse,dx=.1,conf=.95,se.only=TRUE,col="black",shade=rgb(.05,.05,.05,.2),lwd=1,plot.mean.line=FALSE,fTransform=NULL,labels=FALSE,xlim=NULL,ylim=NULL,x_scatter=NULL,y_scatter=NULL,jitter_scatter=FALSE,dx_scatter=.05,pch_scatter=NULL,col_scatter=NULL,cex_scatter=1,...)
+catseyesplot<-function(x,ymean,yse,dx=.1,conf=.95,se.only=TRUE,col="black",shade=rgb(.05,.05,.05,.2),lwd=1,plot.mean.line=FALSE,fTransform=NULL,labels=FALSE,xlim=NULL,ylim=NULL,x_scatter=NULL,y_scatter=NULL,jitter_scatter=FALSE,dx_scatter=.05,pch_scatter=1,col_scatter=1,cex_scatter=1,...)
 {
   nMeans=length(ymean)
   if(nMeans>1)
@@ -280,11 +283,11 @@ catseyesplot<-function(x,ymean,yse,dx=.1,conf=.95,se.only=TRUE,col="black",shade
       if(class(x)=="factor")
       {
         plot(NULL,xlim=xlim,ylim=ylim,xaxt="n",...)
-        axis(1,at=x,labels=levels(x))
+        axis(1,at=x,labels=levels(x),...)
       } else
       {
         plot(NULL,xlim=xlim,ylim=ylim,xaxt="n",...)
-        axis(1,at=x)
+        axis(1,at=x,labels=x,...)
       }
     } else
     {
@@ -294,10 +297,10 @@ catseyesplot<-function(x,ymean,yse,dx=.1,conf=.95,se.only=TRUE,col="black",shade
   } else
   {
     plot(NULL,xlim=xlim,ylim=ylim,xaxt="n",...)
-    axis(1,at=x,labels = labels)
+    #axis(1,at=x,labels = labels,...)
     if(class(labels)=="character")
     {
-      axis(1,at=x,labels = labels)
+      axis(1,at=x,labels = labels,...)
     } else
     {
       print("WARNING: in catseyesplot, labels unrecognized")
@@ -321,7 +324,10 @@ catseyesplot<-function(x,ymean,yse,dx=.1,conf=.95,se.only=TRUE,col="black",shade
     }
     if(!is.null(pch_scatter))
     {
-      if(length(pch_scatter)!=length(u_x))
+      if(length(pch_scatter)==1)
+      { #Added 2020-05-07
+        pch_scatter=rep(pch_scatter,length(u_x))
+      } else if(length(pch_scatter)!=length(u_x))
       {
         print("WARNING: in catseyesplot, length of pch_scatter differs from length of x, so defaults will be used")
         pch_scatter=NULL
@@ -333,7 +339,10 @@ catseyesplot<-function(x,ymean,yse,dx=.1,conf=.95,se.only=TRUE,col="black",shade
     }
     if(!is.null(col_scatter))
     {
-      if(length(col_scatter)!=length(u_x))
+      if(length(col_scatter)==1)
+      { #Added 2020-05-07
+        col_scatter=rep(col_scatter,length(u_x))
+      } else if(length(col_scatter)!=length(u_x))
       {
         print("WARNING: in catseyesplot, length of col_scatter differs from length of x, so defaults will be used")
         col_scatter=NULL
